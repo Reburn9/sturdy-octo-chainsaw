@@ -1,0 +1,22 @@
+name: Report a bug
+description: A reproducible correctness or workflow problem
+title: "bug: "
+body:
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include roles, record state, and a minimal synthetic input. Never include credentials or private data.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Python version, operating system, database, and commit

@@ -1,0 +1,15 @@
+# Local development only: binds to loopback, enables debug, and uses persistent SQLite.
+services:
+  web:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      DJANGO_DEBUG: "1"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      SQLITE_PATH: /app/data/db.sqlite3
+    volumes:
+      - workspace-data:/app/data
+    command: ["sh", "-c", "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000 --noreload"]
+volumes:
+  workspace-data:

@@ -1,0 +1,83 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  sqlite:
+    name: Python ${{ matrix.python }} / SQLite
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: python -m pip install -r requirements-dev.txt
+      - run: ruff check . && ruff format --check .
+      - run: python manage.py check && python manage.py makemigrations --check --dry-run
+      - run: coverage run manage.py test ledger.tests && coverage report
+      - name: Deployment configuration checks
+        env:
+          DJANGO_DEBUG: "0"
+          DJANGO_SECRET_KEY: ci-only-throwaway-key-not-a-deployment-secret-0000000000000000000000
+        run: python manage.py check --deploy --fail-level WARNING
+  postgres:
+    name: PostgreSQL / competing writers
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: labelledger
+          POSTGRES_USER: labelledger
+          POSTGRES_PASSWORD: ephemeral-ci-password
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://labelledger:ephemeral-ci-password@127.0.0.1:5432/labelledger
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -r requirements-dev.txt "psycopg[binary]>=3.2,<4"
+      - run: python manage.py test ledger.tests
+  browser:
+    name: Browser workflow / desktop and mobile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -r requirements-browser.txt
+      - run: python scripts/browser_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-screenshots
+          path: test-results/
+          retention-days: 7
+  container:
+    name: Application container build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t labelledger:ci .
