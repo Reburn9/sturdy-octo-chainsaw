@@ -14,6 +14,10 @@ The project focuses on a concrete problem: a spreadsheet can hold labels, but it
 
 Actual application screenshots from the automated browser run, using clearly marked synthetic data. View the [adjudication screen](docs/images/adjudication.png) and [mobile workspace](docs/images/mobile.png).
 
+## Hosted workspace
+
+[Open LabelLedger](https://labelledger-jo67.onrender.com) — a live, sign-in-required workspace backed by PostgreSQL. The owner password is kept in private Render environment settings; no shared production credentials are published. See [publishing and hosting](docs/PUBLISHING.md) for access and the free database's 30-day lifetime.
+
 ## What works today
 
 - Responsive workspace dashboard, dataset explorer, search, state filters, and personal review queues.

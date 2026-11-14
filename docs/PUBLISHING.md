@@ -9,12 +9,14 @@ Already published versions are skipped. Bump the project version and add `docs/r
 The container is associated with this repository using its OCI source label. GitHub initially makes new container packages private, even when their source repository is public. In the package's settings, an owner can choose Public to allow anonymous pulls. A public package can then be pulled with:
 
 ```bash
-docker pull ghcr.io/reburn9/sturdy-octo-chainsaw:0.1.0
+docker pull ghcr.io/reburn9/sturdy-octo-chainsaw:0.1.1
 ```
 
 For a private package, authenticate to GHCR using your own authorized account before pulling. Never put tokens in repository files or shell command arguments. The publishing jobs use their short-lived GitHub Actions token through standard input.
 
 ## Render deployment
+
+Live workspace: https://labelledger-jo67.onrender.com (sign-in required). The verified deployed source commit and service ID are recorded in [`deployment/render.json`](../deployment/render.json).
 
 `render.yaml` declares a free Python web service and free PostgreSQL database in the same region. It enables HTTPS-related Django settings, trusts Render's sanitized forwarding header, and permits the exact hostname supplied by Render. The build installs pinned PostgreSQL dependencies, collects static files, applies migrations, and creates the initial operator from private environment settings.
 
