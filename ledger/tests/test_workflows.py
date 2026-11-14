@@ -83,6 +83,8 @@ class WorkflowTests(WorkspaceTestCase):
         for label, comment, version in [
             ("other", "", 1),
             ("positive", "x" * 2001, 1),
+            ("positive", "\x00", 1),
+            ("positive", "\ud800", 1),
             ("positive", "", True),
             ("positive", "", 0),
         ]:

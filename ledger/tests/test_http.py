@@ -279,7 +279,13 @@ class APITests(WorkspaceTestCase):
         self.assertEqual(response.json()["state"], "resolved")
 
     def test_malformed_requests_and_method_contract(self):
-        for body in ["{bad", "[]", "{}", '{"label":"positive","version":1,"extra":true}']:
+        for body in [
+            "{bad",
+            "[]",
+            "{}",
+            '{"label":"positive","version":1,"extra":true}',
+            "[" * 1500 + "]" * 1500,
+        ]:
             with self.subTest(body=body):
                 self.assertEqual(
                     self.client.post(self.url, body, content_type="application/json").status_code,

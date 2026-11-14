@@ -1,6 +1,6 @@
 {% extends 'ledger/base.html' %}{% load ledger_tags %}
 {% block content %}
-  <section class="page-heading"><div><p class="eyebrow">THE QUALITY WORKBENCH</p><h1>Every label deserves confidence<span class="heading-dot">.</span></h1><p class="subtitle">Bring your datasets, reviews, and decisions into one clear view.</p></div><a class="button primary" href="{% url 'dataset-create' %}"><span>＋</span> New dataset</a></section>
+  <section class="page-heading"><div><p class="eyebrow">THE QUALITY WORKBENCH</p><h1>Every label deserves confidence<span class="heading-dot">.</span></h1><p class="subtitle">Bring your datasets, reviews, and decisions into one clear view.</p></div><a class="button primary" href="{% url 'dataset-create' %}"><span>+</span> New dataset</a></section>
   <div class="overview-banner"><span class="banner-icon">✦</span><div><strong>Good data is a team effort.</strong><p>{% if queue_count %}You have {{ queue_count }} record{{ queue_count|pluralize }} ready for your independent review.{% else %}Define a label set, invite a second perspective, and turn reviews into reliable decisions.{% endif %}</p></div><a href="{% url 'queue' %}">Open my queue <span>↗</span></a></div>
   <section class="stats" aria-label="Workspace metrics">
     <article class="stat-card"><div class="stat-label">Total records <span>▤</span></div><strong class="stat-number">{{ total }}</strong><small>Across your latest {{ datasets|length }} dataset{{ datasets|length|pluralize }}</small></article>
@@ -16,6 +16,6 @@
       </div>
     </section>
     <aside class="right-column"><section class="panel activity-panel"><div class="section-heading"><h2>Recent activity</h2><span class="live-dot"></span></div>{% for event in events %}<div class="activity-row"><span class="activity-dot {% if event.kind == 'dispute.resolved' %}done{% endif %}"></span><div><strong>{{ event.actor.username|default:'Former member' }}</strong> {{ event.description|lower }}<a href="{% url 'audit' event.dataset.pk %}">{{ event.dataset.name }}</a><small>{{ event.created_at|timesince }} ago</small></div></div>{% empty %}<p class="muted">Your team's work will appear here as it happens.</p>{% endfor %}</section>
-      <section class="principle-card"><p class="eyebrow">BUILT FOR TRUST</p><h3>One record.<br>Independent perspectives.</h3><div class="perspective-art" aria-hidden="true"><span>A</span><i>＋</i><span>B</span><i>→</i><span class="art-check">✓</span></div><p>Reviewers label independently. Agreement is measured only after the full review target is met.</p></section></aside>
+      <section class="principle-card"><p class="eyebrow">BUILT FOR TRUST</p><h3>One record.<br>Independent perspectives.</h3><div class="perspective-art" aria-hidden="true"><span>A</span><i>+</i><span>B</span><i>→</i><span class="art-check">✓</span></div><p>Reviewers label independently. Agreement is measured only after the full review target is met.</p></section></aside>
   </div>
 {% endblock %}

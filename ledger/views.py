@@ -415,7 +415,7 @@ def json_payload(request):
         raise services.WorkflowError("Request body too large.", status=413)
     try:
         body = json.loads(request.body)
-    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+    except (json.JSONDecodeError, UnicodeDecodeError, RecursionError) as exc:
         raise services.WorkflowError("Malformed JSON.") from exc
     if not isinstance(body, dict) or set(body) - {"label", "comment", "version"}:
         raise services.WorkflowError("Use label, comment, and version fields.")

@@ -297,8 +297,12 @@ def lock_version(record, expected):
 def validate_label(dataset, label, comment):
     if label not in dataset.labels or not isinstance(label, str):
         raise WorkflowError("Choose a label from this dataset's label set.")
-    if not isinstance(comment, str) or len(comment) > 2000:
+    if not isinstance(comment, str) or len(comment) > 2000 or "\x00" in comment:
         raise WorkflowError("Notes must be text of at most 2,000 characters.")
+    try:
+        comment.encode("utf-8")
+    except UnicodeEncodeError as exc:
+        raise WorkflowError("Notes must contain valid Unicode.") from exc
 
 
 @transaction.atomic
