@@ -1,0 +1,8 @@
+include manage.py Dockerfile compose.yaml render.yaml .python-version .env.example
+include requirements*.txt README.md CONTRIBUTING.md
+recursive-include scripts *.py *.sh
+recursive-include docs *.md *.png *.svg
+recursive-include .github *.yml *.md
+recursive-include ledger/templates *.html
+recursive-include ledger/static *.css *.js *.svg *.csv
+global-exclude *.sqlite3 *.pyc .env

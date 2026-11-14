@@ -1,0 +1,23 @@
+name: Record verified Render deployment
+on:
+  push:
+    branches: [main]
+    paths: [deployment/render.json]
+  workflow_dispatch:
+permissions:
+  contents: read
+  deployments: write
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify application and record deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/record_render_deployment.py

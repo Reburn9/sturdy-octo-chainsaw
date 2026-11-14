@@ -12,6 +12,8 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") or (
 if not DEBUG and (len(SECRET_KEY) < 50 or SECRET_KEY.startswith("django-insecure-")):
     raise ImproperlyConfigured("Set DJANGO_SECRET_KEY to a private key of at least 50 characters.")
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
+if render_hostname := os.getenv("RENDER_EXTERNAL_HOSTNAME"):
+    ALLOWED_HOSTS.append(render_hostname)
 INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",

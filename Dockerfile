@@ -1,8 +1,11 @@
 FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
 WORKDIR /app
-COPY requirements.txt ./
-RUN python -m pip install -r requirements.txt
+LABEL org.opencontainers.image.title="LabelLedger" \
+      org.opencontainers.image.description="Independent dataset reviews, agreement metrics, and traceable decisions" \
+      org.opencontainers.image.source="https://github.com/Reburn9/sturdy-octo-chainsaw"
+COPY requirements.txt requirements-postgres.txt ./
+RUN python -m pip install -r requirements-postgres.txt
 COPY . .
 RUN DJANGO_DEBUG=0 DJANGO_SECRET_KEY=build-only-key-not-used-at-runtime-0000000000000000000000000000 python manage.py collectstatic --noinput \
     && useradd --create-home appuser \

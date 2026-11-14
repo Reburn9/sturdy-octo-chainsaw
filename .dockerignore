@@ -9,3 +9,6 @@ __pycache__
 htmlcov
 staticfiles
 test-results
+dist
+build
+*.egg-info

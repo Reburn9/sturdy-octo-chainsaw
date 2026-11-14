@@ -135,6 +135,8 @@ The browser smoke script is optional and documented in [development](docs/DEVELO
 
 ## Deployment and current limits
 
+Release automation, the PostgreSQL-capable container, and the Render deployment configuration are described in [Publishing and hosting](docs/PUBLISHING.md). The Render configuration uses free initial plans; its free database expires after 30 days. Hosting credentials and the initial operator password remain in private environment settings.
+
 This is a working first release for local or trusted-team use. Debug mode is enabled by default for local development. For deployment, use [the operations guide](docs/OPERATIONS.md): a private secret, explicit hosts, HTTPS, PostgreSQL, backups, login rate limiting, and a real application server. The development server is not the deployment entry point.
 
 Imports are synchronous and bounded per upload. Metrics currently scan a dataset's votes; the dashboard summarizes the latest 20 accessible datasets. Audit events resist edits through application code but are not cryptographically tamper-evident against a database operator. Exports read current decisions, not a versioned dataset snapshot. Local SQLite serializes writes; use PostgreSQL for a busier shared workspace.
