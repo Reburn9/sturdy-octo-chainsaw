@@ -10,6 +10,10 @@ LabelLedger is a Python application for reviewing text datasets before they beco
 
 The project focuses on a concrete problem: a spreadsheet can hold labels, but it does not enforce independent votes, explain agreement denominators, prevent stale overwrites, or preserve the reasoning behind a final decision.
 
+![LabelLedger workspace with synthetic datasets, measured agreement, and a review queue](docs/images/overview.png)
+
+Actual application screenshots from the automated browser run, using clearly marked synthetic data. View the [adjudication screen](docs/images/adjudication.png) and [mobile workspace](docs/images/mobile.png).
+
 ## What works today
 
 - Responsive workspace dashboard, dataset explorer, search, state filters, and personal review queues.
@@ -110,6 +114,8 @@ coverage report
 ```
 
 Tests cover rollback, deduplication, permissions, independent votes, stale versions, adjudication, metric edge cases, CSRF, escaped HTML, export decisions, API contracts, and safe demo creation. CI runs the suite with SQLite on Python 3.11–3.13 and with PostgreSQL on Python 3.12. Coverage has an 85% minimum for the application modules; migrations, tests, and CLI seed helpers are excluded.
+
+Initial implementation verification: **49 tests passed on PostgreSQL**, **48 passed plus one PostgreSQL-only skip on SQLite**, and **98% coverage of the measured application modules**. All six jobs, including the browser workflow and container build, passed in [this recorded CI run](https://github.com/Reburn9/sturdy-octo-chainsaw/actions/runs/43534112672).
 
 The browser smoke script is optional and documented in [development](docs/DEVELOPMENT.md). It exercises actual login, import, reviewer assignment, independent review, adjudication, and export through the interface.
 
