@@ -3,7 +3,7 @@ from threading import Barrier
 from unittest import skipUnless
 
 from django.contrib.auth import get_user_model
-from django.db import close_old_connections, connection
+from django.db import close_old_connections, connection, connections
 from django.test import TransactionTestCase
 
 from ledger import services
@@ -42,7 +42,7 @@ class ConcurrentVoteTests(TransactionTestCase):
                 except services.WorkflowError as exc:
                     return exc.status
             finally:
-                close_old_connections()
+                connections.close_all()
 
         with ThreadPoolExecutor(max_workers=2) as pool:
             results = list(pool.map(writer, [user.pk for user in reviewers]))

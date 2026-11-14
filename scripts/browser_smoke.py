@@ -24,8 +24,8 @@ def run_smoke(page, base_url, password):
         page.goto(base_url + "/")
         if page.get_by_role("button", name="Sign out").count():
             page.get_by_role("button", name="Sign out").click()
-        page.get_by_label("Username", exact=True).fill(username)
-        page.get_by_label("Password", exact=True).fill(password)
+        page.get_by_label("Username").fill(username)
+        page.get_by_label("Password").fill(password)
         page.get_by_role("button", name="Sign in to workspace").click()
         expect(page.get_by_role("heading", name="Every label deserves confidence.")).to_be_visible()
 
@@ -34,9 +34,9 @@ def run_smoke(page, base_url, password):
     page.screenshot(path=str(ARTIFACTS / "overview.png"), full_page=True)
     page.get_by_role("link", name="New dataset").click()
     page.get_by_label("Dataset name").fill("Smoke review")
-    page.get_by_label("Description", exact=True).fill("Synthetic browser verification.")
-    page.get_by_label("Labels", exact=True).fill("positive, negative")
-    page.get_by_label("Required reviews", exact=True).fill("2")
+    page.get_by_label("Description").fill("Synthetic browser verification.")
+    page.get_by_label("Labels").fill("positive, negative")
+    page.get_by_label("Required reviews").fill("2")
     page.get_by_role("button", name="Create dataset").click()
     expect(page.get_by_role("heading", name="Smoke review", exact=True)).to_be_visible()
     dataset_url = page.url
@@ -61,15 +61,15 @@ def run_smoke(page, base_url, password):
     expect(page.get_by_text("Imported 2 records.", exact=False)).to_be_visible()
     page.get_by_role("link", name="Members", exact=True).click()
     for username in ["maya", "ellis"]:
-        page.get_by_label("Username", exact=True).fill(username)
-        page.get_by_label("Role", exact=True).select_option("reviewer")
+        page.get_by_label("Username").fill(username)
+        page.get_by_label("Role").select_option("reviewer")
         page.get_by_role("button", name="Save membership").click()
         expect(page.get_by_text("Dataset access updated.", exact=True)).to_be_visible()
     for username in ["maya", "ellis"]:
         page.goto(dataset_url)
         page.get_by_role("link", name="Assign reviews", exact=True).click()
-        page.get_by_label("Reviewer", exact=True).select_option(label=username)
-        page.get_by_label("Count", exact=True).fill("2")
+        page.get_by_label("Reviewer").select_option(label=username)
+        page.get_by_label("Count").fill("2")
         page.get_by_role("button", name="Assign records").click()
         expect(page.get_by_text("Assigned 2 records.", exact=False)).to_be_visible()
     for username, label in [("maya", "positive"), ("ellis", "negative")]:
@@ -78,7 +78,7 @@ def run_smoke(page, base_url, password):
         page.get_by_role("link", name="smoke-001", exact=True).click()
         expect(page.get_by_role("heading", name="Independent reviews", exact=True)).to_have_count(0)
         page.get_by_label(label, exact=True).check()
-        page.get_by_label("Review note", exact=True).fill("Independent browser test judgment.")
+        page.get_by_label("Review note").fill("Independent browser test judgment.")
         page.get_by_role("button", name="Save review", exact=True).click()
         expect(page.get_by_text("Review saved.", exact=True)).to_be_visible()
     login("demo")
@@ -86,9 +86,7 @@ def run_smoke(page, base_url, password):
     page.get_by_role("link", name="smoke-001", exact=True).click()
     page.screenshot(path=str(ARTIFACTS / "adjudication.png"), full_page=True)
     page.get_by_label("positive", exact=True).check()
-    page.get_by_label("Review note", exact=True).fill(
-        "The wording explicitly praises the workflow."
-    )
+    page.get_by_label("Review note").fill("The wording explicitly praises the workflow.")
     page.get_by_role("button", name="Save final decision", exact=True).click()
     expect(page.get_by_role("heading", name="Decision ready", exact=True)).to_be_visible()
     page.goto(dataset_url)
