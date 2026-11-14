@@ -4,13 +4,11 @@ from urllib.parse import unquote, urlparse
 
 from django.core.exceptions import ImproperlyConfigured
 
+from config.secret_key import resolve_secret_key
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = os.getenv("DJANGO_DEBUG", "1") == "1"
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") or (
-    "django-insecure-labelledger-local-development-only" if DEBUG else ""
-)
-if not DEBUG and (len(SECRET_KEY) < 50 or SECRET_KEY.startswith("django-insecure-")):
-    raise ImproperlyConfigured("Set DJANGO_SECRET_KEY to a private key of at least 50 characters.")
+SECRET_KEY = resolve_secret_key(os.environ, debug=DEBUG)
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
 if render_hostname := os.getenv("RENDER_EXTERNAL_HOSTNAME"):
     ALLOWED_HOSTS.append(render_hostname)

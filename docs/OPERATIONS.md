@@ -21,6 +21,7 @@ The Dockerfile is also an application-server image with a non-root user and coll
 |---|---|---|
 | `DJANGO_DEBUG` | `1` | Set to `0` outside local development |
 | `DJANGO_SECRET_KEY` | Local development fallback only | Required private key of at least 50 characters when debug is off |
+| `DJANGO_SECRET_SEED` | Unset | Alternative to the explicit key: base64-encoded private random bytes (at least 32 bytes). A domain-separated SHA-512 digest produces a stable Django key. Render generates this seed privately. Explicit `DJANGO_SECRET_KEY` takes precedence. |
 | `DJANGO_ALLOWED_HOSTS` | `localhost,127.0.0.1,[::1]` | Comma-separated allowed hostnames, without URL schemes |
 | `DJANGO_CSRF_TRUSTED_ORIGINS` | Empty | Optional comma-separated HTTPS origins for a trusted cross-origin deployment |
 | `DJANGO_TRUST_PROXY` | `0` | Trust `X-Forwarded-Proto` only behind a proxy that strips untrusted forwarded headers |

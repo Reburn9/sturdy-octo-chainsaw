@@ -20,6 +20,8 @@ For a private package, authenticate to GHCR using your own authorized account be
 
 The initial username is `owner`. Render generates the private `DJANGO_SUPERUSER_PASSWORD`; retrieve it from the service's environment settings. It is never printed by the bootstrap command, committed, or included in a release asset. After creation, bootstrap reruns do not reset credentials, promote an existing ordinary account, or reactivate a disabled operator.
 
+Render also generates a private 256-bit `DJANGO_SECRET_SEED`. The app derives a stable Django signing key from those bytes with a domain-separated SHA-512 digest. This accommodates Render's 44-character base64 value while preserving the minimum length required for an explicit `DJANGO_SECRET_KEY`. Reuse the seed across deploys; rotating it invalidates existing sessions.
+
 The first deployment starts with an empty database. Local synthetic demo accounts are not created on the shared service. Sign in as the owner, create a dataset, and add users deliberately.
 
 **Free-plan limitation:** Render's free PostgreSQL database expires 30 days after creation. Export or migrate any important data before expiration, or explicitly choose suitable paid hosting. The free web service can sleep when idle. This configuration does not authorize an automatic paid upgrade.
